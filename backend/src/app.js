@@ -18,7 +18,7 @@ app.use(clerkMiddleware());
 app.use(arcjetMiddleware());
 
 // ✅ Test route (sirf sanity check ke liye)
-app.get("/api/test", (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).json({ message: "API is working 🚀", env: ENV.NODE_ENV });
 });
 
