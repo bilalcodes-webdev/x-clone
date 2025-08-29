@@ -22,7 +22,7 @@ export const arcjetMiddleware = () => async (req, res, next) => {
 
     if (
       decision.results.some(
-        (result) => result.reason.isBot && result.reason.isSpoofed()
+        (result) => result.reason.isBot() && result.reason.isSpoofed
       )
     ) {
       return res.status(403).json({ message: "Spoofed bot detected" });
@@ -30,7 +30,7 @@ export const arcjetMiddleware = () => async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log("Arcjet Error", error);
+    console.log("Arcjet Error 💥", error);
     next(error);
   }
 };

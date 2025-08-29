@@ -30,6 +30,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
 export const syncUser = asyncHandler(async (req, res) => {
   const { userId } = getAuth();
 
+
   const existingUser = await userModel.findOne({ clerkUserId: userId });
 
   if (existingUser) {

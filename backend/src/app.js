@@ -11,10 +11,15 @@ import { ENV } from "./config/env.js";
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(clerkMiddleware());
+app.use(clerkMiddleware({
+  secretKey: ENV.CLERK_SECRET_KEY,
+  publishableKey: ENV.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+}));
 app.use(arcjetMiddleware());
 
 // ✅ Test route (sirf sanity check ke liye)

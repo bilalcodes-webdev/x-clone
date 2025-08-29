@@ -16,7 +16,7 @@ router.route("/profile").put(isProtected, updateProfile);
 
 router.route("/sync").post(isProtected, syncUser);
 
-router.route("/me").post(isProtected, getCurrentUser);
+router.route("/me").get(isProtected, getCurrentUser);
 
 router.route("/follow/:targetUserId").post(isProtected, followUser);
 
