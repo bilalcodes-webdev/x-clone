@@ -10,22 +10,30 @@ export const arcjetMiddleware = () => async (req, res, next) => {
       requested: 1,
     });
 
+    // Agar deny ho gaya
     if (decision.isDenied()) {
-      if (decision.reason.isRateLimit()) {
+      if (decision.reason.isRateLimit) {
         return res.status(429).json({ message: "Rate limit exceeded" });
-      } else if (decision.reason.isBot()) {
+      } else if (decision.reason.isBot) {
         return res.status(403).json({ message: "Bot detected" });
       } else {
         return res.status(400).json({ message: "Request denied" });
       }
     }
 
-    if (
-      decision.results.some(
-        (result) => result.reason.isBot() && result.reason.isSpoofed
-      )
-    ) {
-      return res.status(403).json({ message: "Spoofed bot detected" });
+    // Spoofed bot check
+    const spoofedBot = decision.results.some(
+      (result) => result.reason.isBot && result.reason.isSpoofed
+    );
+
+    if (spoofedBot) {
+      if (process.env.NODE_ENV === "production") {
+        // Production me block karo
+        return res.status(403).json({ message: "Spoofed bot detected" });
+      } else {
+        // Dev me sirf log karo
+        console.log("⚠️ Spoofed bot detected (ignored in dev):", decision.results);
+      }
     }
 
     next();
